@@ -216,5 +216,29 @@ namespace TMDT.Controllers
                 return RedirectToAction("Login", "Admin");
             return View(new AdminDAO().ListUser(id));
         }
+        public ActionResult CanhBao(int id)
+        {
+            var admin = Session["Admin"] as TMDT.Account;
+            if (admin == null)
+                return RedirectToAction("Login", "Admin");
+            string smtpUserName = "testtmdt123@gmail.com";
+            string smtpPassword = "conheo123";
+            string smtpHost = "smtp.gmail.com";
+            int smtpPort = 25;
+            string emailTo = new AdminDAO().getemail(id);
+            string subject = "Bạn có điểm đánh giá quá thấp";
+            string body = string.Format(
+                "<br/>Xin chào {0}.<br/>Điểm đánh giá của bạn hiện tại là " + new AdminDAO().getrating(id) + ", số điểm này là quá thấp, điều này có thể dẫn đến đơn hàng của bạn.", new AdminDAO().getname(id), Url.Action("ConfirmEmail", "Home", new
+                {
+                    Token = id,
+                    Email = new AdminDAO().getemail(id)
+                }, Request.Url.Scheme));
+
+            EmailService service = new EmailService();
+
+            bool kq = service.Send(smtpUserName, smtpPassword, smtpHost, smtpPort,
+                emailTo, subject, body);
+            return View("AddUserNotification");
+        }
     }
 }

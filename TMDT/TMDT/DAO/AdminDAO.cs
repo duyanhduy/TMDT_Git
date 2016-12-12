@@ -96,5 +96,11 @@ namespace TMDT.DAO
             var model = db.Accounts.Where(s => s.Rating >=(search-1) && s.Rating<=search).OrderByDescending(s=>s.Rating).ToPagedList(page, pageSize);
             return model;
         }
+        public string getrating (int id)
+        {
+            var user = db.Accounts.Find(id);
+            string temp = user.Rating.ToString();
+            return temp.Substring(0, 3);
+        }
     }
 }
