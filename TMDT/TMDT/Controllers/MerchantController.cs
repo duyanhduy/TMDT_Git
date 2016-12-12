@@ -170,6 +170,16 @@ namespace TMDT.Controllers
             return View(product);
         }
 
-        
+        [HttpGet]
+        public ActionResult OrderMerchant(int id)
+        {
+            var user = Session["User"] as TMDT.Account;
+            if (user == null || user.Level!=1)
+                return RedirectToAction("Login", "Home");
+            var model = new BillDAO().GetDetailBill_BillID(id);
+            return View(model);
+        }
+
+
     }
 }

@@ -219,5 +219,16 @@ namespace TMDT.DAO
             }
             return listbill;
         }
+
+        public List<DetailBill> GetDetailM_BillID(int id)
+        {
+            var model = db.DetailBills.Where(x => x.BillID == id).OrderBy(x => x.AccountID).ToList();
+            foreach (var m in model)
+            {
+                m.Product.ProductName = db.Products.Find(m.ProductID).ProductName;
+                m.Product.Account.UserName = db.Accounts.Find(m.AccountID).UserName;
+            }
+            return model;
+        }
     }
 }
