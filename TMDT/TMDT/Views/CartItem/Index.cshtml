@@ -23,6 +23,10 @@
         <div class="clear"></div>
     </div>
     <div class="section group">
+        @if (TempData["Notice"] != null)
+        { <div class="alert alert-warning">
+            @TempData["Notice"]
+        </div>}
         @using (Html.BeginForm("Update", "CartItem", FormMethod.Post))
         {
             <table id="cart" class="table table-hover table-condensed">

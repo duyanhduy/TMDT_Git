@@ -10,8 +10,6 @@ namespace TMDT.Controllers
 {
     public class AdminController : Controller
     {
-        public void test()
-        { }
         public ActionResult Index()
         {
             var admin = Session["Admin"] as TMDT.Account;

@@ -49,23 +49,32 @@ namespace TMDT.Controllers
         {
             var addedAlbum = storeDB.Products
                 .Single(album => album.ProductID == id);
-            var cart = new ShoppingCart();
-            if (Session["User"] == null)
-                cart = ShoppingCart.GetCart(this.HttpContext, null);
+            if (addedAlbum.Quantity > 0)
+            {
+                var cart = new ShoppingCart();
+                if (Session["User"] == null)
+                    cart = ShoppingCart.GetCart(this.HttpContext, null);
+                else
+                {
+                    Account user = Session["User"] as Account;
+                    if (user.AccountID == addedAlbum.AccountID)
+                    {
+                        TempData["notice"] = "Không thể thêm sản phẩm";
+
+                        return RedirectToAction("Index");
+                    }
+                    cart = ShoppingCart.GetCart(this.HttpContext, user.UserName);
+                }
+                TempData["Notice"]=cart.AddToCart(addedAlbum);
+                Session["CartCount"] = cart.GetCount();
+                return RedirectToAction("Index");
+            }
             else
             {
-                Account user = Session["User"] as Account;
-                if (user.AccountID == addedAlbum.AccountID)
-                {
-                    TempData["notice"] = "Không thể thêm sản phẩm";
-
-                    return RedirectToAction("Index");
-                }
-                cart = ShoppingCart.GetCart(this.HttpContext, user.UserName);
+                TempData["Notice"] = "Số lượng sản phẩm đã hết ";
+                return RedirectToAction("Index");
             }
-            cart.AddToCart(addedAlbum);
-            Session["CartCount"] = cart.GetCount();
-            return RedirectToAction("Index");
+
         }
 
         [HttpPost]
@@ -107,7 +116,7 @@ namespace TMDT.Controllers
                 Account user = Session["User"] as Account;
                 cart1 = ShoppingCart.GetCart(this.HttpContext, user.UserName);
             }
-            cart1.UpdateCart(cart);
+            TempData["Notice"]= cart1.UpdateCart(cart);
             Session["CartCount"] = cart1.GetCount();
             return RedirectToAction("Index");
         }
