@@ -10,8 +10,6 @@ namespace TMDT.Controllers
 {
     public class AdminController : Controller
     {
-        public void test()
-        { }
         public ActionResult Index()
         {
             var admin = Session["Admin"] as TMDT.Account;
@@ -171,15 +169,12 @@ namespace TMDT.Controllers
                 return RedirectToAction("Login", "Admin");
             return View();
         }
-
-        [HttpPost]
+       
         public ActionResult AddUser(Account model)
         {
             var admin = Session["Admin"] as TMDT.Account;
             if (admin == null)
                 return RedirectToAction("Login", "Admin");
-            if (ModelState.IsValid)
-            {
                 var dao = new AccountDAO();
                 if (dao.CheckUserName(model.UserName))
                 {
@@ -197,8 +192,9 @@ namespace TMDT.Controllers
                     user.CreatedDate = DateTime.Now;
                     user.ExpiryDate = DateTime.Now;
                     user.Status = "true";
+                user.NoRating = 0;
+                user.Rating = 0;
                     var result = dao.Insert(user);
-                }
             }
             return View("AddUserNotification");
         }
