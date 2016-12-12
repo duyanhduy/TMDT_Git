@@ -129,6 +129,9 @@ namespace TMDT.Controllers
 
         public ActionResult LockUser(int AccountID, string LockNote)
         {
+            var admin = Session["Admin"] as TMDT.Account;
+            if (admin == null)
+                return RedirectToAction("Login", "Admin");
             if (String.IsNullOrEmpty(LockNote))
             {
                 TempData["Notice"] = "Không được bỏ trống lí do khóa";
@@ -140,6 +143,9 @@ namespace TMDT.Controllers
 
         public ActionResult ResetPass(int id)
         {
+            var admin = Session["Admin"] as TMDT.Account;
+            if (admin == null)
+                return RedirectToAction("Login", "Admin");
             new AdminDAO().ResetPass(id);
             string smtpUserName = "testtmdt123@gmail.com";
             string smtpPassword = "conheo123";
@@ -207,6 +213,9 @@ namespace TMDT.Controllers
         }
         public ActionResult LockReason(int id)
         {
+            var admin = Session["Admin"] as TMDT.Account;
+            if (admin == null)
+                return RedirectToAction("Login", "Admin");
             return View(new AdminDAO().ListUser(id));
         }
     }
