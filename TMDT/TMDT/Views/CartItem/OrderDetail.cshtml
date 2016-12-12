@@ -4,6 +4,7 @@
     ViewBag.Title = "OrderDetail";
     Layout = "~/Views/Shared/_Layout.cshtml";
     string M_name = null;
+    bool check = false;
     var user = Session["User"] as TMDT.Account;
 }
 <div class="content">
@@ -24,7 +25,7 @@
                         {
                             M_name = item.Product.Account.UserName;
 
-                            <tr>
+                            <tr style="font-weight:bolder;">
                                 <td>Người bán: @item.Product.Account.UserName</td>
                                 <td> SĐT: @item.Product.Account.Phone</td>
                                 <td>Email: @item.Product.Account.Email</td>
@@ -34,7 +35,6 @@
                                 </td>
                             </tr>
                             <tr style="font-weight:bolder;">
-                                <th>STT</th>
                                 <th>Tên sản phẩm</th>
                                 <th>Số lượng</th>
                                 <th>Giá</th>
@@ -43,8 +43,9 @@
                         @if (M_name != item.Product.Account.UserName)
                         {
                             <tr style="height:10px;"></tr>
-
-                            <tr>
+                            if(!check)
+                            { 
+                            <tr style="font-weight:bolder;">
                                 
                                 <td>Người bán: @item.Product.Account.UserName</td>
                                 <td> SĐT: @item.Product.Account.Phone</td>
@@ -54,22 +55,23 @@
                                 </td>
                             </tr>
                             <tr style="font-weight:bolder;">
-                                <th>STT</th>
+                                
                                 <th>Tên sản phẩm</th>
                                 <th>Số lượng</th>
                                 <th>Giá</th>
                             </tr>
+                            check = true;
+                            }
                         }
                     </thead>
                     <tbody>
-                        @{int i = 1;}
-                        <tr>
-                            <td>@i</td>
+                        
+                        <tr>                            
                             <td>@item.Product.ProductName</td>
                             <td>@item.Quantity</td>
                             <td>@String.Format("{0:n0}", item.Product.Price * item.Quantity)</td>
                         </tr>
-                        @{i++;}
+                        
                     </tbody>
                 }
             </table>

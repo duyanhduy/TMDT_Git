@@ -103,7 +103,7 @@ namespace TMDT.Controllers
         public ActionResult Logout()
         {
             Session.Remove("Admin");
-            return RedirectToAction("Index");
+            return RedirectToAction("Login");
         }
 
         public ActionResult Users(string name,string currentFilter,int page = 1, int pageSize = 10)

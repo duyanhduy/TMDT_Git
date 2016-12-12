@@ -211,3 +211,8 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 TMDT/TMDT/Web.config
+<<<<<<< HEAD
+TMDT/TMDT/Web.config
+=======
+>>>>>>> origin/master
+TMDT/TMDT/Web.config
