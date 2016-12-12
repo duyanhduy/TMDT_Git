@@ -1,0 +1,35 @@
+﻿@model TMDT.Account
+
+@{
+    ViewBag.Title = "LockReason";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>LockReason</h2>
+
+<div>
+    <h4>Account</h4>
+    <hr />
+@using (Html.BeginForm("LockUser", "Admin", FormMethod.Post, new { id = "form1" }))
+      {
+        <dl class="dl-horizontal">
+        @Html.HiddenFor(model=>model.AccountID)
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LockNote)
+        </dt>
+
+        <dd>
+            @Html.TextBoxFor(model => model.LockNote)
+        </dd>
+           <input type="submit" title="Xác nhận khóa user này" class="btn-images btn btn btn-default">Xác nhận khóa user này
+    </dl>
+      }
+</div>
+
