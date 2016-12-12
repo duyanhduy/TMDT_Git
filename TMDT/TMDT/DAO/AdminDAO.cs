@@ -18,6 +18,11 @@ namespace TMDT.DAO
             var model = db.Accounts.Where(x => x.AccountID != 0).OrderByDescending(x => x.CreatedDate).ToPagedList(page, pageSize);
             return model;
         }
+        public IEnumerable<Account> ListNUser(string name,int page, int pageSize)
+        {
+            var model = db.Accounts.Where(x => x.AccountID != 0 && x.UserName.Contains(name)).OrderByDescending(x => x.CreatedDate).ToPagedList(page, pageSize);
+            return model;
+        }
         public Account ListUser(int id)
         {
             var model = db.Accounts.Find(id);
@@ -47,9 +52,9 @@ namespace TMDT.DAO
         {
             var model = db.Accounts.OrderBy(s => s.Rating).ToPagedList(page, pageSize);
             if (isit == 1)
-                model = db.Accounts.OrderByDescending(s => s.Rating).Take(5).ToPagedList(page, pageSize);
+                model = db.Accounts.Where(s=>s.NoRating > 0).OrderByDescending(s => s.Rating).Take(5).ToPagedList(page, pageSize);
             else
-                model = db.Accounts.OrderBy(s => s.Rating).Take(5).ToPagedList(page, pageSize);
+                model = db.Accounts.Where(s => s.NoRating > 0).OrderBy(s => s.Rating).Take(5).ToPagedList(page, pageSize);
             return model;
         }
         public void LockUser(int id,string reason)

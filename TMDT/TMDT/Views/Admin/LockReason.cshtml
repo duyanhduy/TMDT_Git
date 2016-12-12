@@ -6,9 +6,12 @@
 }
 
 <h2>LockReason</h2>
-
 <div>
     <h4>Account</h4>
+    @if(TempData["Notice"]!= null)
+    {
+        <p>@TempData["Notice"]</p>
+    }
     <hr />
 @using (Html.BeginForm("LockUser", "Admin", FormMethod.Post, new { id = "form1" }))
       {
@@ -28,7 +31,7 @@
         <dd>
             @Html.TextAreaFor(model => model.LockNote)
         </dd>
-           <input type="submit" value="Xác nhận khóa user này" class="btn-images btn btn btn-default">
+           <input type="submit" value="Xác nhận khóa user này" onclick="return Check()" class="btn-images btn btn btn-default">
     </dl>
       }
 </div>
