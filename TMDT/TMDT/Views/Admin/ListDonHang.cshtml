@@ -17,13 +17,12 @@
             }  value="@i">Tháng @i</option>}
                    </select>
        Năm: <select class="btn-dropbox" id="year" name="year">
-            <option value="-1">--Chọn--</option>
-            @for (int i = 2010; i < 2020; i++)
+            @for (int i = 2016; i < 2020; i++)
             {
         <option @if (i == ViewBag.CurrentFilterY)
         {
             @Html.Raw("selected");
-        } value="@i">Năm @i</option>}
+        }  value="@i">Năm @i</option>}
         </select>
         <input type="submit" class="btn btn-default" value="Lọc" />
 

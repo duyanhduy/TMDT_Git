@@ -23,7 +23,7 @@ namespace TMDT.Controllers
             if (admin == null)
                 return RedirectToAction("Login", "Admin");
             decimal? i = 0;
-            if (year != -1 && year !=  null)
+            if (year !=  null)
             {
                 page = 1;
             }
@@ -33,7 +33,7 @@ namespace TMDT.Controllers
             }
             ViewBag.CurrentFilterY = year;
 
-            if (month != -1 && month != null)
+            if ( month != null)
             {
                 page = 1;
             }
