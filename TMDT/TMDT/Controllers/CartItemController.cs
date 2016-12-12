@@ -49,6 +49,12 @@ namespace TMDT.Controllers
         {
             var addedAlbum = storeDB.Products
                 .Single(album => album.ProductID == id);
+            if (addedAlbum.Account.Status.Equals("false"))
+                {
+                TempData["notice"] = "Người bán đã bị khóa, không thể thêm sản phẩm";
+
+                return RedirectToAction("Index");
+            }
             if (addedAlbum.Quantity > 0)
             {
                 var cart = new ShoppingCart();
