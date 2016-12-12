@@ -43,8 +43,9 @@
                 @Html.DisplayFor(modelItem => item.SumMoney)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
+                @{
+                    string parameterValue = item.CreatedDate.ToShortDateString();                }
+                @Html.DisplayFor(modelItem => parameterValue)            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ShipName)
             </td>

@@ -28,8 +28,11 @@
                 @Html.DisplayFor(modelItem => item.Account.UserName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
+                @{
+                    string parameterValue = item.CreatedDate.Value.ToShortDateString();                }
+                 @Html.DisplayFor(modelItem => parameterValue)
             </td>
+
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>

@@ -295,7 +295,7 @@ namespace TMDT.Controllers
                     {
                         try
                         {
-                            sch.Rating = (double)(thisVote + sch.Rating) / (double)(sch.NoRating + 1);
+                            sch.Rating = (double)(thisVote + sch.Rating*sch.NoRating) / (double)(sch.NoRating + 1);
                             sch.NoRating += 1;
                             db.Entry(sch).State = EntityState.Modified;
                             db.SaveChanges();
