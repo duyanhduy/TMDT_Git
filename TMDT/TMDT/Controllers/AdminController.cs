@@ -106,7 +106,7 @@ namespace TMDT.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Users(int page = 1, int pageSize = 10)
+        public ActionResult Users(string name,int page = 1, int pageSize = 10)
         {
             var admin = Session["Admin"] as TMDT.Account;
             if (admin == null)
