@@ -11,9 +11,10 @@
             Danh sách user
         </h1>
         <a href="@Url.Action("AddUser", "Admin")" title="Thêm user mới" class="btn btn-success">Thêm user mới</a>
-        @using (Html.BeginForm())
+        @using (Html.BeginForm("Users","Admin",FormMethod.Get))
         {
-            @Html.TextBox("name", "", new { placeholder = "Gõ từ khóa", }) <input type="submit" value="Tìm kiếm" class="btn" />
+            @Html.TextBox("name", ViewBag.CurrentFilter as string, new { placeholder = "Gõ từ khóa", }) 
+            <input type="submit" value="Tìm kiếm" class="btn" />
         }
      </div>
 </div>
@@ -53,7 +54,6 @@
                         }
                 </tbody>
             </table>
-            @Html.PagedListPager(Model, page => Url.Action("Users", new { page }))
-        </div>
+@Html.PagedListPager(Model, page => Url.Action("Users", new { page,currentFilter = ViewBag.CurrentFilter }))        </div>
     </div>
 </div>

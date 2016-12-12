@@ -10,6 +10,8 @@ namespace TMDT.Controllers
 {
     public class AdminController : Controller
     {
+        public void test()
+        { }
         public ActionResult Index()
         {
             var admin = Session["Admin"] as TMDT.Account;
@@ -106,17 +108,34 @@ namespace TMDT.Controllers
             return RedirectToAction("Login");
         }
 
-        public ActionResult Users(string name,int page = 1, int pageSize = 10)
+        public ActionResult Users(string name,string currentFilter,int page = 1, int pageSize = 10)
         {
             var admin = Session["Admin"] as TMDT.Account;
             if (admin == null)
                 return RedirectToAction("Login", "Admin");
             var model = new AdminDAO().ListAllUser(page, pageSize);
+            if (name != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                name = currentFilter;
+            }
+            ViewBag.CurrentFilter = name;
+
+            if (!String.IsNullOrEmpty(name))
+                model = new AdminDAO().ListNUser(name, page, pageSize);
             return View(model);
         }
 
         public ActionResult LockUser(int AccountID, string LockNote)
         {
+            if (String.IsNullOrEmpty(LockNote))
+            {
+                TempData["Notice"] = "Không được bỏ trống lí do khóa";
+                return RedirectToAction("LockReason", new { id =AccountID });
+            }
             new AdminDAO().LockUser(AccountID, LockNote);
             return View("AddUserNotification");
         }
