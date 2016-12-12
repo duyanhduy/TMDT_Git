@@ -83,7 +83,7 @@
                 <h4> @Html.ActionLink("Thêm vào giỏ", "AddToCart", "CartItem", new { id = Model.ProductID }, "")</h4>
                 
             </div>
-        </div>@if (Model.Account.Rating < 2)
+        </div>@if (Model.Account.Rating < 2 && Model.Account.Rating !=0)
         { <span style="color:red;font-style:italic">(Người bán này có điểm đánh giá thấp, cẩn thận khi mua hàng)</span>}
         </div>
         <script>

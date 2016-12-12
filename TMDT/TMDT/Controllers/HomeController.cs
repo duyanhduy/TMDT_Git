@@ -37,7 +37,7 @@ namespace TMDT.Controllers
             return View(db.Products.Find(id));
         }
 
-        public ActionResult ReturnSearch(string name, string category, string pricetext1, string pricetext2, int? page, string currentFilter)
+        public ActionResult ReturnSearch(string name, string category, string merchant, string pricetext1, string pricetext2, int? page, string currentFilter)
         {
             TMDTModel db = new TMDTModel();
             db.Products.Load();
@@ -53,6 +53,8 @@ namespace TMDT.Controllers
             ViewBag.CurrentFilter = name;
             if (!string.IsNullOrEmpty(name))
                 product = product.Where(i => i.ProductName.Contains(name));
+            if (!string.IsNullOrEmpty(merchant))
+                product = product.Where(i => i.Account.UserName.Contains(merchant));
             if (!String.IsNullOrEmpty(category))
             {
                 int lop = Convert.ToInt32(category);
