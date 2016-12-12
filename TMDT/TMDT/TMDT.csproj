@@ -410,6 +410,7 @@
     <Content Include="Views\Home\ChangeInfo.cshtml" />
     <Content Include="Views\Home\ChangePass.cshtml" />
     <Content Include="Views\Admin\LockReason.cshtml" />
+    <Content Include="Views\Merchant\OrderMerchant.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -220,15 +220,47 @@ namespace TMDT.DAO
             return listbill;
         }
 
-        public List<DetailBill> GetDetailM_BillID(int id)
+        public List<DetailBill> GetDetailM_BillID(int id, int merchantid)
         {
-            var model = db.DetailBills.Where(x => x.BillID == id).OrderBy(x => x.AccountID).ToList();
-            foreach (var m in model)
+            List<DetailBill> listdetail=new List<DetailBill>();
+            var model = (from b in db.Bills
+                         join d in db.DetailBills on b.BillID equals d.BillID
+                         where b.BillID==id && d.Product.AccountID == merchantid
+                         select new
+                         {
+                             //product=d.Product,
+                             productid= d.Product.ProductID,
+                             quantity = d.Quantity,
+                             price = d.Price
+                         }).AsEnumerable().Select(x => new DetailBill()
+                         {
+                             //Product=x.product,
+                             ProductID=x.productid,
+                             Quantity = x.quantity,
+                             Price=x.price
+                         }).ToList();
+            foreach (var detail in model)
             {
-                m.Product.ProductName = db.Products.Find(m.ProductID).ProductName;
-                m.Product.Account.UserName = db.Accounts.Find(m.AccountID).UserName;
-            }
+                //foreach(var detail in m.Bill.DetailBills)
+                //{
+                //m.Product = db.Products.Find(m.ProductID);
+
+
+                Product product= new Product(); 
+                product=db.Products.Find(detail.ProductID);
+                detail.Product = product;
+
+                //}
+
+            }           
             return model;
+        }
+
+        public Account GetAccount_BillID(int id)
+        {
+            int? userid = db.Bills.Where(x => x.BillID == id).Select(x => x.AccountID).First();
+            var acc = db.Accounts.Find(userid);
+            return acc;
         }
     }
 }

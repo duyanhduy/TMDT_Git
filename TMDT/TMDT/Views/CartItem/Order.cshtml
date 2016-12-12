@@ -80,7 +80,8 @@
                             <td>@item.CreatedDate</td>
                             <td>@item.SumMoney</td>
                             <td>@item.Status</td>
-                            <td><a href="@Url.Action("OrderDetail", "CartItem", new { id = item.BillID})" title="Xem chi tiết đơn đặt hàng" class="btn-images btn btn btn-default">Xem</a></td>
+                            <td><a href="@Url.Action("OrderDetail", "CartItem", new { id = item.BillID})" title="Xem chi tiết hàng mua" class="btn-images btn btn btn-default">Xem hàng mua</a> @if (user.Level == 1 && user.AccountID != item.AccountID)
+                            {<a href="@Url.Action("OrderMerchant", "Merchant", new { id = item.BillID})" title="Xem chi tiết hàng bán" class="btn-images btn btn btn-default">Xem hàng bán</a>}</td>
                             @if (user.Level == 1 && user.AccountID != item.AccountID)
                             {
                                 <td><button type="button" @(item.Status == "Hoàn tất" ? "disabled" : "") class="btn btn-default btn1" data-toggle="modal" data-target="#myModal1" data-id="@item.BillID" title="Cập nhật trạng thái đơn đặt hàng">Cập nhật trạng thái</button></td>

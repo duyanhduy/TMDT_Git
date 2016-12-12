@@ -176,10 +176,9 @@ namespace TMDT.Controllers
             var user = Session["User"] as TMDT.Account;
             if (user == null || user.Level!=1)
                 return RedirectToAction("Login", "Home");
-            var model = new BillDAO().GetDetailBill_BillID(id);
+            var model = new BillDAO().GetDetailM_BillID(id, user.AccountID);
+            ViewBag.CustomerInfo = new BillDAO().GetAccount_BillID(id);
             return View(model);
         }
-
-
     }
 }
