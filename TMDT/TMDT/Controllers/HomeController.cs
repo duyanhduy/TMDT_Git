@@ -160,7 +160,9 @@ namespace TMDT.Controllers
                     user.CreatedDate = DateTime.Now;
                     user.ExpiryDate = DateTime.Now;
                     user.Status = "false";
-                    user.LockNote = "Chưa kích hoạt";
+                    user.LockNote = "Ban chua kich hoat";
+                    user.Rating = 0;
+                    user.NoRating = 0;
                     var result = dao.Insert(user);
                     if (result > 0)
                     {
