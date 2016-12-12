@@ -10,8 +10,6 @@ namespace TMDT.Controllers
 {
     public class AdminController : Controller
     {
-        public void test()
-        { }
         public ActionResult Index()
         {
             var admin = Session["Admin"] as TMDT.Account;
@@ -19,13 +17,39 @@ namespace TMDT.Controllers
                 return RedirectToAction("Login", "Admin");
             return View();
         }
-        public ActionResult ListDonHang(int page = 1, int pageSize = 10)
+        public ActionResult ListDonHang(int? year,int? month,int? currentyear,int? currentmonth,int page = 1, int pageSize = 10)
         {
             var admin = Session["Admin"] as TMDT.Account;
             if (admin == null)
                 return RedirectToAction("Login", "Admin");
-            var model = new AdminDAO().ListAllDonHang(page, pageSize);
+            decimal? i = 0;
+            if (year !=  null)
+            {
+                page = 1;
+            }
+            else
+            {
+                year = currentyear;
+            }
+            ViewBag.CurrentFilterY = year;
 
+            if ( month != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                month = currentmonth;
+            }
+            ViewBag.CurrentFilterM = month;
+            var model = new AdminDAO().ListAllDonHang(year,month,page, pageSize);
+            var model12 = new AdminDAO().ListAllDonHang(year,month);
+
+            foreach (var item in model12)
+            {
+                i+= item.Total;
+            }
+            ViewBag.Total = i;
             return View(model);
         }
         public ActionResult GetRating(string m)
@@ -131,6 +155,9 @@ namespace TMDT.Controllers
 
         public ActionResult LockUser(int AccountID, string LockNote)
         {
+            var admin = Session["Admin"] as TMDT.Account;
+            if (admin == null)
+                return RedirectToAction("Login", "Admin");
             if (String.IsNullOrEmpty(LockNote))
             {
                 TempData["Notice"] = "Không được bỏ trống lí do khóa";
@@ -142,6 +169,9 @@ namespace TMDT.Controllers
 
         public ActionResult ResetPass(int id)
         {
+            var admin = Session["Admin"] as TMDT.Account;
+            if (admin == null)
+                return RedirectToAction("Login", "Admin");
             new AdminDAO().ResetPass(id);
             string smtpUserName = "testtmdt123@gmail.com";
             string smtpPassword = "conheo123";
@@ -171,15 +201,12 @@ namespace TMDT.Controllers
                 return RedirectToAction("Login", "Admin");
             return View();
         }
-
-        [HttpPost]
+       
         public ActionResult AddUser(Account model)
         {
             var admin = Session["Admin"] as TMDT.Account;
             if (admin == null)
                 return RedirectToAction("Login", "Admin");
-            if (ModelState.IsValid)
-            {
                 var dao = new AccountDAO();
                 if (dao.CheckUserName(model.UserName))
                 {
@@ -197,8 +224,9 @@ namespace TMDT.Controllers
                     user.CreatedDate = DateTime.Now;
                     user.ExpiryDate = DateTime.Now;
                     user.Status = "true";
+                user.NoRating = 0;
+                user.Rating = 0;
                     var result = dao.Insert(user);
-                }
             }
             return View("AddUserNotification");
         }
@@ -209,7 +237,34 @@ namespace TMDT.Controllers
         }
         public ActionResult LockReason(int id)
         {
+            var admin = Session["Admin"] as TMDT.Account;
+            if (admin == null)
+                return RedirectToAction("Login", "Admin");
             return View(new AdminDAO().ListUser(id));
+        }
+        public ActionResult CanhBao(int id)
+        {
+            var admin = Session["Admin"] as TMDT.Account;
+            if (admin == null)
+                return RedirectToAction("Login", "Admin");
+            string smtpUserName = "testtmdt123@gmail.com";
+            string smtpPassword = "conheo123";
+            string smtpHost = "smtp.gmail.com";
+            int smtpPort = 25;
+            string emailTo = new AdminDAO().getemail(id);
+            string subject = "Bạn có điểm đánh giá quá thấp";
+            string body = string.Format(
+                "<br/>Xin chào {0}.<br/>Điểm đánh giá của bạn hiện tại là " + new AdminDAO().getrating(id) + ", số điểm này là quá thấp, điều này có thể dẫn đến đơn hàng của bạn.", new AdminDAO().getname(id), Url.Action("ConfirmEmail", "Home", new
+                {
+                    Token = id,
+                    Email = new AdminDAO().getemail(id)
+                }, Request.Url.Scheme));
+
+            EmailService service = new EmailService();
+
+            bool kq = service.Send(smtpUserName, smtpPassword, smtpHost, smtpPort,
+                emailTo, subject, body);
+            return View("AddUserNotification");
         }
     }
 }

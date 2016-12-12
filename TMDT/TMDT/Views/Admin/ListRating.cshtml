@@ -25,6 +25,7 @@
                             <td>
                                 @Html.Action("GetRating", new { m = (item.Rating + "," + item.NoRating) })
 
+
                             </td>
                         </tr>
                     }
@@ -50,6 +51,7 @@
                             </td>
                             <td>
                                 @Html.Action("GetRating", new { m = (item.Rating + "," + item.NoRating) })
+                                <a href="@Url.Action("CanhBao", "Admin", new { id = item.AccountID })" title="cảnh báo" class="btn-images btn btn btn-default">Cảnh báo</a>
                             </td>
                         </tr>
                     }

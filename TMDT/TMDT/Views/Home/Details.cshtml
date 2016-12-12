@@ -39,9 +39,8 @@
                     </dt>
 
                     <dd>
-                        <label>@Html.DisplayFor(model => model.Account.UserName)</label>
+                        <label>Người bán</label>
                     </dd>
-
                     <dt>Tên loại</dt>
                     <dd>
                         @Html.DisplayFor(model => model.Category.CategoryName)
@@ -76,8 +75,10 @@
             <div class="add-cart">
                 <br />
                 <h4> @Html.ActionLink("Thêm vào giỏ", "AddToCart", "CartItem", new { id = Model.ProductID }, "")</h4>
+                
             </div>
-        </div>
+        </div>@if (Model.Account.Rating < 2 && Model.Account.Rating !=0)
+        { <span style="color:red;font-style:italic">(Người bán này có điểm đánh giá thấp, cẩn thận khi mua hàng)</span>}
         </div>
         <script>
             $("#img_01").elevateZoom({ gallery: 'gallery_01', cursor: 'pointer', galleryActiveClass: 'active', imageCrossfade: true, loadingIcon: 'http://www.elevateweb.co.uk/spinner.gif' });

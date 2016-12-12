@@ -28,9 +28,24 @@ namespace TMDT.DAO
             var model = db.Accounts.Find(id);
             return model;
         }
-        public IEnumerable<Order> ListAllDonHang(int page, int pageSize)
+        public IEnumerable<Order> ListAllDonHang(int? year,int? month,int page, int pageSize)
         {
+
             var model = db.Orders.OrderBy(s => s.CreatedDate).ToPagedList(page, pageSize);
+            if(year != -1 && year != null)
+                model = db.Orders.Where(s => s.CreatedDate.Value.Year == year).OrderBy(s => s.CreatedDate).ToPagedList(page, pageSize);
+            if (month != -1 && month != null)
+                model = db.Orders.Where(s => s.CreatedDate.Value.Month == month).OrderBy(s => s.CreatedDate).ToPagedList(page, pageSize);
+            return model;
+        }
+        public IEnumerable<Order> ListAllDonHang(int? year,int?month)
+        {
+            IEnumerable<Order> model = db.Orders.OrderBy(s=>s.CreatedDate);
+                if (year != -1 && year != null)
+                model = db.Orders.Where(s => s.CreatedDate.Value.Year == year);
+            if (month != -1 && month != null)
+                model = db.Orders.Where(s => s.CreatedDate.Value.Month == month);
+
             return model;
         }
         public IEnumerable<Bill> ListAllHoaDon(int page, int pageSize)
@@ -95,6 +110,12 @@ namespace TMDT.DAO
         {
             var model = db.Accounts.Where(s => s.Rating >=(search-1) && s.Rating<=search).OrderByDescending(s=>s.Rating).ToPagedList(page, pageSize);
             return model;
+        }
+        public string getrating (int id)
+        {
+            var user = db.Accounts.Find(id);
+            string temp = user.Rating.ToString();
+            return temp.Substring(0, 3);
         }
     }
 }

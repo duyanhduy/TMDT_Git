@@ -14,6 +14,8 @@
             @Html.DisplayNameFor(model => model.Bill.ShipName)
         </th>
         <th>
+Ngày Lập        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Product.ProductName)
         </th>
         <th>
@@ -32,6 +34,11 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Bill.ShipName)
+            </td>
+            <td>
+                @{
+                    string parameterValue = item.Bill.CreatedDate.ToShortDateString();                }
+                @Html.DisplayFor(modelItem => parameterValue)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Product.ProductName)
