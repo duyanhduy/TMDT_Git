@@ -24,54 +24,86 @@ namespace TMDT.Logic
             return cart;
         }
         // Helper method to simplify shopping cart calls
-        public void AddToCart(Product album)
+        public string AddToCart(Product album)
         {
-            Random rand = new Random();
-            // Get the matching cart and album instances
-            var cartItem = storeDB.ShoppingCartItems.SingleOrDefault(
-                c => c.CartID == ShoppingCartId
-                && c.ProductID == album.ProductID);
+           
+                Random rand = new Random();
+                // Get the matching cart and album instances
+                var cartItem = storeDB.ShoppingCartItems.SingleOrDefault(
+                    c => c.CartID == ShoppingCartId
+                    && c.ProductID == album.ProductID);
 
-            if (cartItem == null)
-            {
-                // Create a new cart item if no cart item exists
-                cartItem = new cartitem
+                if (cartItem == null)
                 {
-                    ItemID = rand.Next().ToString(),
-                    ProductID = album.ProductID,
-                    CartID = ShoppingCartId,
-                    Quantity = 1,
-                    DateCreated = DateTime.Now
-                };
-                storeDB.ShoppingCartItems.Add(cartItem);
-            }
-            else
-            {
+                    // Create a new cart item if no cart item exists
+                    cartItem = new cartitem
+                    {
+                        ItemID = rand.Next().ToString(),
+                        ProductID = album.ProductID,
+                        CartID = ShoppingCartId,
+                        Quantity = 1,
+                        DateCreated = DateTime.Now
+                    };
+                    storeDB.ShoppingCartItems.Add(cartItem);
+                }
+                else
+                {
+
                 // If the item does exist in the cart, 
                 // then add one to the quantity
-                cartItem.Quantity++;
-            }
-            // Save changes
-            storeDB.SaveChanges();
+                if (album.Quantity > cartItem.Quantity + 1)
+                    cartItem.Quantity++;
+                else
+                    return "Không đủ số lượng";
+                }
+                // Save changes
+                storeDB.SaveChanges();
+            return "Thêm hàng thành công";
         }
-        public void UpdateCart(List<cartitem> cart)
+        public string UpdateCart(List<cartitem> cart)
         {
             try
             {
+                List<cartitem> oldcart = storeDB.ShoppingCartItems.Where(c => c.CartID == ShoppingCartId).ToList();
+                string s = "";
+                TMDTModel db = new TMDTModel();
+                Product album = new Product();
                 EmptyCart();
                 for (int i = 0; i < cart.Count; i++)
                 {
-                    cartitem cartitem = new cartitem
+                    album = db.Products.Find(cart[i].ProductID);
+                    if (album.Quantity > cart[i].Quantity)
                     {
-                        ItemID = cart[i].ItemID,
-                        Quantity = cart[i].Quantity,
-                        ProductID = cart[i].ProductID,
-                        CartID = cart[i].CartID,
-                        DateCreated = cart[i].DateCreated
-                    };
-                    storeDB.ShoppingCartItems.Add(cartitem);
+                        cartitem cartitem = new cartitem
+                        {
+                            ItemID = cart[i].ItemID,
+                            Quantity = cart[i].Quantity,
+                            ProductID = cart[i].ProductID,
+                            CartID = cart[i].CartID,
+                            DateCreated = cart[i].DateCreated
+                        };
+                        storeDB.ShoppingCartItems.Add(cartitem);
+                    }
+                    else
+                    {
+                        cartitem cartitem = new cartitem
+                        {
+                            ItemID = cart[i].ItemID,
+                            Quantity = oldcart.Where(x=>x.ItemID.Equals(cart[i].ItemID)).SingleOrDefault().Quantity,
+                            ProductID = cart[i].ProductID,
+                            CartID = cart[i].CartID,
+                            DateCreated = cart[i].DateCreated
+                        };
+                        storeDB.ShoppingCartItems.Add(cartitem);
+                        s += "Số lượng sản phẩm " + album.ProductName + " Không đủ , ";
+                    }
                 }
+               
                 storeDB.SaveChanges();
+                if (String.IsNullOrEmpty(s))
+                    return "Cập nhật thành công";
+                else
+                    return s;
             }
             catch (DbEntityValidationException e)
             {

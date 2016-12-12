@@ -40,8 +40,10 @@ namespace TMDT.Controllers
         [HttpGet]
         public ActionResult Sell()
         {
+            var user = Session["User"] as TMDT.Account;
+            if (user == null)
+                return RedirectToAction("Login", "Home");
             var a = new AccountDAO();
-            Account user = Session["User"] as Account;
             DaysLeft i = new AccountDAO().CountDayLeft(int.Parse(user.AccountID.ToString()));
             if (i.Days < 1)
             {

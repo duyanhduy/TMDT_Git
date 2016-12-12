@@ -42,6 +42,7 @@
 
         [Required(ErrorMessage = "Yêu cầu nhập giá sản phẩm")]
         [Display(Name = "Giá")]
+        [Range(0,2000, ErrorMessage = "Nhập giá từ 0 đến 2000.")]
         [DisplayFormat(DataFormatString = "{0:n0}", ApplyFormatInEditMode = true)]
         public decimal? Price { get; set; }
 
