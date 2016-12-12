@@ -17,13 +17,39 @@ namespace TMDT.Controllers
                 return RedirectToAction("Login", "Admin");
             return View();
         }
-        public ActionResult ListDonHang(int page = 1, int pageSize = 10)
+        public ActionResult ListDonHang(int? year,int? month,int? currentyear,int? currentmonth,int page = 1, int pageSize = 10)
         {
             var admin = Session["Admin"] as TMDT.Account;
             if (admin == null)
                 return RedirectToAction("Login", "Admin");
-            var model = new AdminDAO().ListAllDonHang(page, pageSize);
+            decimal? i = 0;
+            if (year != -1 && year !=  null)
+            {
+                page = 1;
+            }
+            else
+            {
+                year = currentyear;
+            }
+            ViewBag.CurrentFilterY = year;
 
+            if (month != -1 && month != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                month = currentmonth;
+            }
+            ViewBag.CurrentFilterM = month;
+            var model = new AdminDAO().ListAllDonHang(year,month,page, pageSize);
+            var model12 = new AdminDAO().ListAllDonHang(year,month);
+
+            foreach (var item in model12)
+            {
+                i+= item.Total;
+            }
+            ViewBag.Total = i;
             return View(model);
         }
         public ActionResult GetRating(string m)
